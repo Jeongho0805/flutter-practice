@@ -1,6 +1,10 @@
 import 'package:contact/home_page.dart';
 import 'package:flutter/material.dart';
 
+/**
+ * https://www.youtube.com/watch?v=mMgr47QBZWA
+ */
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -10,7 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage(),
-      theme: ThemeData(primarySwatch: Colors.yellow),
+      theme: ThemeData(
+        primarySwatch: Colors.yellow,
+        primaryColor: Colors.yellow[200],
+      ),
     );
   }
 }
