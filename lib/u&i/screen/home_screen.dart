@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -8,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,19 +20,57 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           child: Column(
-            children: [_TopPart(), _BottomPart()],
+            children: [
+              _TopPart(
+                selectedDate: selectedDate,
+                onPressed: onHeartPressed,
+              ),
+              _BottomPart()
+            ],
           ),
         ),
       ),
     );
   }
+
+  void onHeartPressed() {
+    DateTime now = DateTime.now();
+    showCupertinoDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            color: Colors.white,
+            height: 300.0,
+            child: CupertinoDatePicker(
+              mode: CupertinoDatePickerMode.date,
+              maximumDate: DateTime(now.year, now.month, now.day + 1),
+              onDateTimeChanged: (DateTime date) {
+                setState(() {
+                  selectedDate = date;
+                });
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _TopPart extends StatelessWidget {
-  const _TopPart({super.key});
+  final DateTime selectedDate;
+  final VoidCallback onPressed;
+
+  _TopPart({required this.selectedDate, required this.onPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,19 +89,20 @@ class _TopPart extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                '2021.12.17',
+                '${selectedDate.year}.${selectedDate.month}.${selectedDate.day}',
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
             ],
           ),
           IconButton(
               iconSize: 60.0,
-              onPressed: () {},
+              onPressed: onPressed,
               icon: Icon(
                 Icons.favorite,
                 color: Colors.red,
               )),
-          Text('D+1',
+          Text(
+              'D+${DateTime(now.year, now.month, now.day).difference(selectedDate).inDays + 1}',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 50.0,
